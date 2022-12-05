@@ -1,0 +1,234 @@
+<html>
+<head> Bone marrow assistant. Created on 2022/8/5. Shan-Chi Yu. </head>
+
+<body>
+<h2>Bone marrow biopsy checklist</h2>
+ 
+<form id="inputform">
+<input type="reset" value="Reset">
+<div id="Diagnosisform">
+<h3> Diagnosis</h3>
+<label for ="diagnosis">Diagnosis </label>
+<textarea id="diagnosis" name="diagnosis" cols="80">Bone marrow, iliac crest, biopsy, </textarea>
+<label for ="diagnosisName">Diagnosis</label>
+<select id="diagnosisName" name="diagnosisName">
+        <option value="no evidence of lymphoma">no evidence of lymphoma</option>
+        <option value="hypocellular marrow">hypocellular marrow</option>
+        <option value="acute leukemia, favoring myeloid">acute leukemia, favoring myeloid</option>  
+        <option value="acute leukemia, favoring lymphoblastic">acute leukemia, favoring lymphoblastic </option>  
+        <option value="no evidence of neuroblastoma involvement">no evidence of neuroblastoma involvement</option>        
+        <option value="c/w myeloproliferative neoplasm">c/w myeloproliferative neoplasm</option>  
+        <option value="c/w plasma cell myeloma">c/w plasma cell myeloma</option> 
+        <option value="acute leukemia">acute leukemia</option> 
+        <option value="trilineage hematopoiesis">trilineage hematopoiesis</option> 
+        <option value="" selected></option>
+</select>
+</div>
+
+<div id="Grossform">
+<h3> Gross</h3> 
+<label for ="specimen_length">Specimen length (cm): </label>
+<input type="text" id="specimen_length" name="specimen_length">
+</div>
+
+<div id="Microform">
+<h3> Micro</h3> 
+<label for ="artifact">Artifact description</label>
+<textarea id="artifact" cols="40"></textarea>
+<label for = "cellularity_h"></br> Cellularity, hyper or hypo? </label>
+<select id="cellularity_h" name="cellularity_h">
+            <option value="hypocellularity">Low</option>
+            <option value="nearly normal cellularity">Normal</option>
+            <option value="hypercellularity">High</option>    
+            <option value="" selected></option>
+</select>
+<label for ="cellularity">Cellularity (%): </label>
+<input type="text" id="cellularity" name="cellularity">
+<label for ="ME_ratio"></br> M:E=</label>
+<textarea id="ME_ratio">3:1</textarea>
+<label for ="ME_stain">IHC stain</label>
+<select id="ME_stain" name="MPOCD71">
+            <option value=", confirmed by MPO immunostain">MPO</option>
+            <option value=", confirmed by MPO and CD71 immunostains">MPO+CD71</option>  
+            <option value="" selected> </option>   
+</select>
+<label for ="megakaryocyte">Megakaryocytes </label>
+<textarea id="megakaryocyte" name="megakaryocyte" cols="40">Megakaryocytes are adequate. </textarea>
+
+<div id="reticulinform">
+
+</div>
+<input type="checkbox" id="Hemosiderin" name="Hemosiderin" value="Hemosiderin deposition is noted. ">
+<label>Hemosiderin deposition is noted.</label>
+</br>
+</br>
+<label  for ="freeinput"> Other input </label>
+<textarea id="freeinput" name="freeinput" cols="100" rows="5"></textarea> 
+</br>
+The marrow spaces are replaced by <input type="text" id="replace">.
+<textarea id="replace_marker" cols="100">These cells are positive for and negative for .</textarea>  
+</br>
+<input type="text" id="Postive_marker">
++ cells account for  
+<input type="text" id="Postive_marker_rate">
+% of total mononuclear cells.
+<input type="checkbox" id="CD34CD117" name="CD34CD117" value="CD34 and CD117 immunostains show no increased immature cells. ">
+<label>CD34 and CD117 immunostains show no increased immature cells.</label>
+<input type="checkbox" id="CD34" name="CD34" value="CD34 immunostain shows no increased immature cells. ">
+<label>CD34 immunostain shows no increased immature cells.</label>
+</br>
+<input type="checkbox" id="No CD20" name="No CD20" value="No cells are positive for CD20. ">
+<label>No cells are positive for CD20.</label>  
+</br>
+Rare CD20+ small cells are seen (
+    <input type="text" id="CD20_rate">   
+%).
+</br>
+Rare CD79a+ small cells are seen (
+    <input type="text" id="CD79a_rate">   
+%).
+</br>
+Scant CD3+ small cells are seen (
+    <input type="text" id="CD3_rate">   
+%).
+</br>
+<input type="checkbox" id="NoLymphoma" name="NoLymphoma" value="</br></br>No evidence of lymphoma involvement is seen. ">
+<label>No evidence of lymphoma involvement is seen.</label>  
+<input type="checkbox" id="NoNB" name="NoNB" value="</br></br>No evidence of neuroblastoma involvement is seen. ">
+<label>No evidence of neuroblastoma involvement is seen.</label>  
+</br>       
+The picture is consistent with
+<input type="input" id="consistent_what" name="consistent_what">
+</br>
+Please correlate with
+<input type="input" id="correlate_what" name="correlate_what">
+
+
+</div>
+
+<div id="CBCform">
+<h3> CBC</h3>   
+<label for ="CBC">CBC (第四代報告系統 清單)</label>
+<textarea id="CBC" name="CBC" cols="40"></textarea>
+</div>
+ 
+<hr>
+<botton type="button" id="generateReport" onclick="processingdata()" style="color: blue;">Generate a report!</botton>
+</form>
+<hr>
+<div id="ReportOutput">
+    <h1>Report format</h1>
+    <p id="Diagnosis"> (Empty diagnosis) </p>
+    <p id="Gross"> (Empty Gross) </p>
+    <p id="Micro"> (Empty Micro) </p>
+    <p id="CBCoutput"> (Empty CBC) </p>
+</div>
+
+<script>
+    let reticulinstatus=prompt("Reticulin stain is ready! (y) Yes (other key) No");
+    reticulinform();
+
+    function reticulinform(){
+        if (reticulinstatus=="y"){
+        document.getElementById("reticulinform").innerHTML=`<label for ="reticulin">Reticulin stain </label>
+<textarea id="reticulin" name="reticulin" cols="40">Reticulin stain </textarea>
+<label for ="reticulins">reticulin stain </label>
+<select id="reticulins" name="reticulins">
+            <option value="is pending. ">Reticulin stain is pending. </option>
+            <option value="shows no fibrosis. ">Reticulin stain shows no fibrosis. </option>              
+            <option value="" selected> </option>   
+</select>`;
+        }
+        else{
+            document.getElementById("reticulinform").innerHTML=`<label for ="reticulin">Reticulin stain </label>
+<textarea id="reticulin" name="reticulin" cols="40">Reticulin stain </textarea>
+            <label for ="reticulins">reticulin stain </label>
+<select id="reticulins" name="reticulins">
+            <option value="is pending. " selected>Reticulin stain is pending. </option>
+            <option value="shows no fibrosis. ">Reticulin stain shows no fibrosis. </option>              
+            <option value=""> </option>   
+</select>`;
+        }
+    }
+
+    function processingdata(){
+        diagnosisoutput();
+        grossoutput();
+        if (document.getElementById("specimen_length").value==""){alert("Specimen size! Not filled in!")}
+        microOutput();
+        CBCoutput();
+        }
+
+    function diagnosisoutput(){
+        let diagnosis=document.getElementById("diagnosis").value;
+        let diagnosisName=document.getElementById("diagnosisName").value;
+        document.getElementById("Diagnosis").innerHTML=diagnosis+diagnosisName;
+        }
+
+    function grossoutput(){
+        let specimenlength=document.getElementById("specimen_length").value;
+        let grosstext="     The specimen is a bone marrow fragment, about "+specimenlength+" cm long, received from core biopsy.\n\nSubmitted in toto, one cassette (A1).";
+        document.getElementById("Gross").innerText=grosstext;
+        }
+
+    function microOutput(){
+        let artifact=document.getElementById("artifact").value;
+        let cellularity_h=document.getElementById("cellularity_h").value;
+        let cellularity=document.getElementById("cellularity").value;
+        let ME=document.getElementById("ME_ratio").value;
+        let MEstain=document.getElementById("ME_stain").value;
+        let megakaryocyte=document.getElementById("megakaryocyte").value;
+        let reticulin=document.getElementById("reticulin").value;
+        let reticulins=document.getElementById("reticulins").value;
+        let hemosiderin=document.getElementById("Hemosiderin");
+        let freeinput=document.getElementById("freeinput").value ;
+        let replace=document.getElementById("replace").value;
+        let replace_marker=document.getElementById("replace_marker").value;
+        let Positive_marker=document.getElementById("Postive_marker").value; 
+        let Positive_marker_rate=document.getElementById("Postive_marker_rate").value;      
+        let CD34CD117=document.getElementById("CD34CD117"); 
+        let CD34=document.getElementById("CD34"); 
+        let NoCD20=document.getElementById("No CD20"); 
+        let CD20_rate=document.getElementById("CD20_rate").value;
+        let CD79a_rate=document.getElementById("CD79a_rate").value;
+        let CD3_rate= document.getElementById("CD3_rate").value; 
+        let NoLymphoma=document.getElementById("NoLymphoma");
+        let NoNB=document.getElementById("NoNB");
+        let consistent_what=document.getElementById("consistent_what").value;
+        let correlate_what=document.getElementById("correlate_what").value;
+        let microtext="";
+        microtext+=("MICROSCOPIC FINDING</br>     "+artifact+" The bone marrow shows "+cellularity_h+" with hematopoietic components accounting for about "+cellularity+"% of the marrow spaces, and M/E ratio of "+ME+MEstain+". "+megakaryocyte+" "+reticulin+reticulins+" "+freeinput);
+        if (hemosiderin.checked){microtext+=hemosiderin.value;}
+        if (replace!=""){microtext+=("The marrow spaces are replaced by "+replace+". ");microtext+=replace_marker;}
+        if (Positive_marker!=""){microtext+=Positive_marker; microtext+=("+ cells account for "+Positive_marker_rate+"% of total mononuclear cells. ");}
+        if (CD34CD117.checked){microtext+=CD34CD117.value;}
+        else if (CD34.checked){microtext+=CD34.value;}
+        if (NoCD20.checked){microtext+=NoCD20.value;}
+        if (CD20_rate!=""){microtext+=("Rare CD20+ cells are seen ("+CD20_rate+"%). ");}  
+        if (CD79a_rate!=""){microtext+=("Rare CD79a+ cells are seen ("+CD79a_rate+"%). ");}   
+        if (CD3_rate!=""){microtext+=("Scant CD3+ cells are seen ("+CD3_rate+"%). ");}    
+        if (NoLymphoma.checked){microtext+=NoLymphoma.value;}
+        if (NoNB.checked){microtext+=NoNB.value;}
+        if (consistent_what!=""){microtext+=("The picture is consistent with "+consistent_what+". ");}
+        if (correlate_what!=""){microtext+=("Please correlate with "+correlate_what+". ");}
+        
+        document.getElementById("Micro").innerHTML=microtext;
+        }
+
+    function CBCoutput(){
+        let cbcraw=document.getElementById("CBC").value;
+        let cbcarray=cbcraw.split(/\s+/);
+        let labitem=["HB", "WBC", "PLT", "Blast", "Hb","Plt"];
+        let CBCtext="Ref:\nCBC: ";
+        for (let i=0;i<(cbcarray.length-2);i++){
+            for (let x of labitem){
+             if (cbcarray[i].includes(x)) {
+             CBCtext=CBCtext + cbcarray[i] + " "+ cbcarray[i+1]+" "+cbcarray[i+2]+"  ";}
+          }
+          }
+    document.getElementById("CBCoutput").innerHTML=CBCtext;
+        }
+</script>
+</body>
+</html>
+
